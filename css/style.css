@@ -221,7 +221,6 @@ body {
 }
 
 .time {
-  min-height: 124px;
   margin-bottom: 10px;
   font-family: "Arial-MT";
   font-size: 100px;
@@ -298,7 +297,6 @@ body {
 
 @media (max-width: 768px) {
   .time {
-    min-height: 80px;
     font-size: 72px;
   }
 
@@ -331,6 +329,12 @@ body {
   }
 }
 
+@media (max-width: 580px) {
+  .time {
+    font-size: 68px;
+  }
+}
+
 @media (max-width: 480px) {
   .footer {
     padding-top: 0;
@@ -352,6 +356,7 @@ body {
 @media (max-width: 440px) {
   .time {
     min-height: 70px;
+    font-size: 58px;
   }
   .quote {
     font-size: 18px;
@@ -362,9 +367,15 @@ body {
   }
 }
 
+@media (max-width: 390px) {
+  .time {
+    font-size: 52px;
+  }
+}
+
 @media (max-width: 360px) {
   .time {
-    font-size: 58px;
+    font-size: 48px;
   }
   .date {
     font-size: 22px;
@@ -374,5 +385,11 @@ body {
   }
   .slide-next {
     right: 15px;
+  }
+}
+
+@media (max-width: 360px) {
+  .time {
+    font-size: 44px;
   }
 }

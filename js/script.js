@@ -39,11 +39,11 @@ function showGreeting() {
   const timeOfDay = setGreetings();
 
   let activeLanguage = document.querySelector(".active-language");
-  let greetingText = `Good${timeOfDay}`;
+  let greetingText = `Good${timeOfDay},`;
   if (activeLanguage.dataset.language === "ru") {
-    greetingText = `Добр${timeOfDay}`;
+    greetingText = `Добр${timeOfDay},`;
   } else if (activeLanguage.dataset.language === "it") {
-    greetingText = `Buon${timeOfDay}`;
+    greetingText = `Buon${timeOfDay},`;
   }
 
   GREETING.textContent = greetingText;
