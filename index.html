@@ -12,10 +12,31 @@
     <header class="header">
       <div class="player">
         <div class="player-controls">
-          <button class="play-prev player-icon"></button>
-          <button class="play player-icon"></button>
-          <button class="play-next player-icon"></button>
+          <div class="controls-btn-wrapper">
+            <button class="play-prev player-icon"></button>
+            <button class="play player-icon"></button>
+            <button class="play-next player-icon"></button>
+          </div>
+          <input
+            type="range"
+            name="duration-range"
+            id="duration-range"
+            value="0"
+          />
+          <div class="player-time">
+            <span class="player-currenttime pcast-time">00:00:00</span>
+            <span class="player-duration pcast-time">00:00:00</span>
+          </div>
+          <input
+            type="range"
+            name="volume-range"
+            id="volume-range"
+            class="volume"
+            min="0"
+            max="10"
+          />
         </div>
+
         <ul class="play-list"></ul>
       </div>
       <div class="translation-btn-wrapper">

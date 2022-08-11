@@ -54,7 +54,7 @@ function setGreetings() {
   const date = new Date();
   const hours = date.getHours();
   let activeLanguage = document.querySelector(".active-language");
-  if (hours >= 23 || hours < 5) {
+  if (hours >= 0 || hours < 6) {
     switch (activeLanguage.dataset.language) {
       case "ru":
         return `ой ночи`;
@@ -65,7 +65,7 @@ function setGreetings() {
       default:
         return ` night`;
     }
-  } else if (hours >= 5 && hours <= 11) {
+  } else if (hours >= 6 && hours < 12) {
     switch (activeLanguage.dataset.language) {
       case "ru":
         return `ое утро`;
@@ -76,7 +76,7 @@ function setGreetings() {
       default:
         return ` morning`;
     }
-  } else if (hours > 11 && hours <= 17) {
+  } else if (hours >= 12 && hours <= 17) {
     switch (activeLanguage.dataset.language) {
       case "ru":
         return `ый день`;
@@ -87,7 +87,7 @@ function setGreetings() {
       default:
         return ` afternoon`;
     }
-  } else if (hours > 17 && hours < 23) {
+  } else if (hours >= 18 && hours <= 23) {
     switch (activeLanguage.dataset.language) {
       case "ru":
         return `ый вечер`;
@@ -184,12 +184,12 @@ async function getWeather() {
   let cityName = cityInput.value;
   let activeLanguage = document.querySelector(".active-language");
   let language = activeLanguage.dataset.language;
-  console.log(language);
+
   let url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&lang=${language}&appid=5c08670149a0b1a4dc7a372a3d5e5333&units=metric`;
   console.log(url);
   const res = await fetch(url);
   const data = await res.json();
-  console.log(data.weather[0].id, data.weather[0].description, data.main.temp);
+  //console.log(data.weather[0].id, data.weather[0].description, data.main.temp);
 
   weatherIcon.className = "weather-icon owf";
   weatherIcon.classList.add(`owf-${data.weather[0].id}`);
@@ -246,69 +246,167 @@ for (let i = 0; i < trackList.length; i++) {
   playList.append(li);
 }
 
-let isPlay = false;
-let playNum = 0;
-const playItem = document.querySelectorAll(".play-item");
-playItem[playNum].classList.add("active");
-
-const audio = new Audio();
-function playAudio() {
-  if (!isPlay) {
-    audio.src = trackList[playNum].src;
-    audio.currentTime = 0;
-    audio.play();
-    isPlay = true;
-    playBtn.classList.add("pause");
-  } else {
-    audio.pause();
-    isPlay = false;
-    playBtn.classList.remove("pause");
-  }
-}
-playBtn.addEventListener("click", playAudio);
-
-function playNext() {
-  playNum += 1;
-
-  if (playNum >= trackList.length) {
-    playNum = 0;
-  }
-  playItem.forEach((item) => item.classList.remove("active"));
+(function () {
+  let isPlay = false;
+  let playNum = 0;
+  let durationRangeValue;
+  let audioCurrentTime;
+  const playItem = document.querySelectorAll(".play-item");
   playItem[playNum].classList.add("active");
-  if (isPlay === true) {
-    audio.src = trackList[playNum].src;
-    audio.currentTime = 0;
-    audio.play();
+
+  const audio = new Audio();
+  function playAudio() {
+    if (!isPlay) {
+      audio.src = trackList[playNum].src;
+      //audio.currentTime = 0;
+      audio.play();
+      isPlay = true;
+      playBtn.classList.add("pause");
+      //durationRangeValue = audio.currentTime;
+      //playerDuration.textContent = toHHMMSS(audio.duration);
+      console.log("on");
+      //audio.currentTime = audioCurrentTime;
+      console.log(audio.currentTime);
+      console.log("audioCurrentTime:" + audioCurrentTime);
+    } else {
+      audio.pause();
+      isPlay = false;
+      playBtn.classList.remove("pause");
+      console.log("off");
+      console.log(audio.currentTime);
+      audioCurrentTime = audio.currentTime;
+      console.log(audioCurrentTime);
+      durationRangeValue = durationRange.value;
+
+      //playerDuration.textContent = toHHMMSS(audio.duration);
+      //durationRange.setAttribute("value", audio.currentTime);
+      //console.log(durationRange.value);
+    }
   }
-}
+  playBtn.addEventListener("click", playAudio);
 
-playNextBtn.addEventListener("click", playNext);
+  audio.addEventListener("ended", function () {
+    playNext();
+  });
 
-function playPrev() {
-  playNum -= 1;
-  if (playNum < 0) {
-    playNum = trackList.length - 1;
-  }
-  playItem.forEach((item) => item.classList.remove("active"));
-  playItem[playNum].classList.add("active");
-  if (isPlay === true) {
-    audio.src = trackList[playNum].src;
-    audio.currentTime = 0;
-    audio.play();
-  }
-}
+  function playNext() {
+    playNum += 1;
 
-playPrevBtn.addEventListener("click", playPrev);
-
-for (let i = 0; i < playItem.length; i++) {
-  playItem[i].addEventListener("click", function choosePlayItem() {
+    if (playNum >= trackList.length) {
+      playNum = 0;
+    }
     playItem.forEach((item) => item.classList.remove("active"));
-    playItem[i].classList.add("active");
-    playNum = i;
+    playItem[playNum].classList.add("active");
     if (isPlay === true) {
       audio.src = trackList[playNum].src;
-      audio.currentTime = 0;
+      //audio.currentTime = 0;
+      //console.log(currentTime);
       audio.play();
     }
+    playerCurrentTime.textContent = "00:00:00";
+  }
+
+  playNextBtn.addEventListener("click", playNext);
+
+  function playPrev() {
+    playNum -= 1;
+    if (playNum < 0) {
+      playNum = trackList.length - 1;
+    }
+    playItem.forEach((item) => item.classList.remove("active"));
+    playItem[playNum].classList.add("active");
+    if (isPlay === true) {
+      audio.src = trackList[playNum].src;
+      //audio.currentTime = 0;
+      audio.play();
+    }
+    playerCurrentTime.textContent = "00:00:00";
+  }
+
+  playPrevBtn.addEventListener("click", playPrev);
+
+  /*------------------- choose player track ------------------------------ */
+
+  for (let i = 0; i < playItem.length; i++) {
+    playItem[i].addEventListener("click", function choosePlayItem() {
+      playItem.forEach((item) => item.classList.remove("active"));
+      playItem[i].classList.add("active");
+      playNum = i;
+      if (isPlay === true) {
+        audio.src = trackList[playNum].src;
+        audio.currentTime = 0;
+        audio.play();
+        playerCurrentTime.textContent = "00:00:00";
+      }
+    });
+  }
+
+  /*-------------------- set track current time ---------------------- */
+
+  let toHHMMSS = function (totalsecs) {
+    let sec_num = parseInt(totalsecs, 10); // don't forget the second param
+    let hours = Math.floor(sec_num / 3600);
+    let minutes = Math.floor((sec_num - hours * 3600) / 60);
+    let seconds = sec_num - hours * 3600 - minutes * 60;
+
+    if (hours < 10) {
+      hours = "0" + hours;
+    }
+    if (minutes < 10) {
+      minutes = "0" + minutes;
+    }
+    if (seconds < 10) {
+      seconds = "0" + seconds;
+    }
+
+    let time = hours + ":" + minutes + ":" + seconds;
+    return time;
+  };
+
+  function onloadedmetadata() {
+    durationRange.setAttribute("max", Math.floor(audio.duration));
+    playerDuration.textContent = toHHMMSS(audio.duration);
+    //playerCurrentTime.textContent = "00:00:00";
+    //audio.currentTime = 0;
+  }
+  if (audio.duration) {
+    onloadedmetadata();
+  } else {
+    audio.addEventListener("loadedmetadata", onloadedmetadata);
+  }
+  audio.addEventListener("timeupdate", function () {
+    durationRange.setAttribute("value", audio.currentTime);
+    console.log(durationRange.value);
+    //audio.currentTime = durationRange.value;
+    playerCurrentTime.textContent = toHHMMSS(audio.currentTime);
   });
-}
+
+  /*--------------------- set audio duration --------------------*/
+
+  durationRange.addEventListener(
+    "click",
+    function (e) {
+      audio.currentTime =
+        Math.floor(audio.duration) * (e.offsetX / e.target.offsetWidth);
+    },
+    false
+  );
+
+  volumeRange.addEventListener(
+    "input",
+    function () {
+      audio.volume = parseInt(this.value) / 10;
+      step = 0.01;
+      min = 0;
+      max = 1;
+      value = 1;
+      if (audio.volume === 0) {
+        volumeRange.classList.add("mute");
+      }
+      if (audio.volume !== 0 && volumeRange.classList.contains("mute")) {
+        volumeRange.classList.remove("mute");
+      }
+    },
+    false
+  );
+})(this);

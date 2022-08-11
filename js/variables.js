@@ -14,10 +14,17 @@ const cityInput = document.querySelector(".city");
 const QUOTE = document.querySelector(".quote");
 const AUTHOR = document.querySelector(".author");
 const changeQuote = document.querySelector(".change-quote");
+const player = document.querySelector(".player");
 const playBtn = document.querySelector(".play");
 const playList = document.querySelector(".play-list");
 const playNextBtn = document.querySelector(".play-next");
 const playPrevBtn = document.querySelector(".play-prev");
+const volumeRange = player.querySelector("#volume-range");
+const durationRange = player.querySelector("#duration-range");
+const playerCurrentTime = player.querySelector(".player-currenttime");
+const playerDuration = player.querySelector(".player-duration");
+let speeds = [1, 1.5, 2, 2.5, 3];
+
 const quotes = {
   en: [
     {
@@ -54,7 +61,7 @@ const quotes = {
     },
     {
       text: "Is it working? Don't touch.",
-      author: "Любой программист",
+      author: "Any programmer",
     },
     {
       text: "A broken program usually does less harm than a bad one.",
@@ -162,7 +169,7 @@ const quotes = {
     },
     {
       text: "Funziona? Non toccare nulla.",
-      author: "Любой программист",
+      author: "Qualsiasi programmista",
     },
     {
       text: "Un programma che non funziona di solito fa meno male di uno che funziona male.",
